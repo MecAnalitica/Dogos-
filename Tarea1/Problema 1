@@ -1,44 +1,55 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Autores: Juan Carlos Martinez Vargas, Fabian Munoz Lopez, David Cabrera Martinez, Daniel Rodriguez Guillen	"
+" Materia: Mecanica Analitica											"
+" Fecha:	 13/sep/2018											"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+				Explicacion del Metodo Numerico y metodo numerico
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "	Este codigo hace un calculo numerico para el tiempo de vuelo de un proyectil tomando en cuenta la 	"
 "	resistencia del aire, mediante la variacion del parametro k de friccion, la velocidad inicial y el	"
 "	angulo inicial de lanzamiento.										"
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-#importacion de los paquetes necesarios para el programa
-#el paquete math contiene funciones matematicas basicas como: sin, cos, Ln, Log, exp, etc.
+	#importacion de los paquetes necesarios para el programa
+	#el paquete math contiene funciones matematicas basicas como: sin, cos, Ln, Log, exp, etc.
+
 import math
 
 
-#declaracion de las constantes fijas y las listas de lo parametros variados.
+	#declaracion de las constantes fijas y las listas de lo parametros variados.
 
-v=[100, 200, 300, 400, 500] 		
-phi=[30, 45, 60, 75]
-g=9.81
-ti=5.0
-tf=100.0
-error=0.001
-k=[0.001, 0.01, 0.02, 0.03, 0.04, 0.05]
+v=[100, 200, 300, 400, 500] 			#Arreglo con diferentes velocidades	
+phi=[30, 45, 60, 75]				#Arreglo con diferentes 
+g=9.81						#constante de la gravedad
+ti=5.0						#tiempo inicial
+tf=100.0					#tiempo final
+error=0.001					#error
+k=[0.001, 0.01, 0.02, 0.03, 0.04, 0.05]		#coeficientes de friccion
 
 
 
-#Impresion de los nombres de los valores impresos por columna
+	#Impresion de los nombres de los valores impresos por columna
 
 print("\nh / T / Vel_inicial / angulo_inicial \n")
 
-"""
-Apertura de archivo para escritura de datos sobre el rango 
-en este caso se asigna a la variable FILE la funcion de 
-apertura del archivo de nombre kT_mix.txt para escritura, w=write
-"""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"	Apertura de archivo para escritura de datos sobre el rango 		"
+"	en este caso se asigna a la variable FILE la funcion de 		"
+"	apertura del archivo de nombre kT_mix.txt para escritura, w=write	"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
 file = open("kT_mix.txt","w")
 
-"""
-En esta seccion de hace un acumulado de ciclos FOR para 
-la variacion consecutiva de los parametros elegidos, aqui 
-no es necesario un contador como en C para la implementacion 
-del ciclo FOR, ya que este actua con la instruccion 
-"para cada elemento X en la lista Y" ejecuta el ciclo.
-"""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"		En esta seccion de hace un acumulado de ciclos FOR para 	"
+"		la variacion consecutiva de los parametros elegidos, aqui 	"
+"		no es necesario un contador como en C para la implementacion 	"
+"		del ciclo FOR, ya que este actua con la instruccion 		"
+"		para cada elemento X en la lista Y" ejecuta el ciclo.		"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 for e in v:
 
 	for d in phi:
@@ -47,24 +58,25 @@ for e in v:
 
 		for c in k:
 
-#definicion de la funcion para el calculo del tiempo de vuelo del proyectil T
+					#definicion de la funcion para el calculo del tiempo de vuelo del proyectil T
 
 			def fun(T):
 				y = (((c*V + g)/(g*c))*(1 - math.exp(-c * T))) - T
 				return (y)
-"""
-definicion de una lista llamada raiz para el almacenamiento
-de los valores calculado mediante el metodo de la secante
-"""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"	Definicion de una lista llamada raiz para el almacenamiento	"
+"	de los valores calculado mediante el metodo de la secante	"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 			raiz=[]
 			raiz.insert(0,0)
 			i=0
 			ec=1
 
-"""
-ciclo WHILE para la implementacion del metodo numerico de la 
-secante para encontrar la raiz de la funcion del tiempo de vuelo 
-"""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"	ciclo WHILE para la implementacion del metodo numerico de la		"
+"	secante para encontrar la raiz de la funcion del tiempo de vuelo 	"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 			while abs(ec) > error:
 				tn = tf - (fun(tf) * (ti - tf))/(fun(ti) - fun(tf))
 				raiz.append(tn)
@@ -79,6 +91,7 @@ secante para encontrar la raiz de la funcion del tiempo de vuelo
 
 
 #definicion de la expresion para la posicion horizontal calculada analiticamente
+
 			def x(t):
 				return (U/c)*(1 - math.exp(-c*t))
 
@@ -88,5 +101,5 @@ secante para encontrar la raiz de la funcion del tiempo de vuelo
 			file.write("%f" % x(tn))
 			file.write("\n")
 
-#cierre del archivo de escritura
+			#cierre del archivo de escritura
 file.close()
